@@ -1,0 +1,288 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ---------- Tokens del estudio ---------- */
+:root,
+[data-theme="dark"] {
+  --ui-bg: #07070a;
+  --ui-panel: rgb(18 18 24 / 0.72);
+  --ui-solid: #111116;
+  --ui-fg: #ececf1;
+  --ui-muted: #9b9ba8;
+  --ui-subtle: rgb(255 255 255 / 0.05);
+  --ui-hover: rgb(255 255 255 / 0.08);
+  --ui-border: rgb(255 255 255 / 0.09);
+  --ui-strong: #f4f4f6;
+  --ui-on-strong: #0a0a0d;
+  --ui-accent: #22d3ee;
+  --ui-accent-2: #a78bfa;
+  --ui-ring: #22d3ee;
+  --ui-danger: #fb7185;
+  --ui-success: #34d399;
+  --ui-mesh-1: rgb(124 58 237 / 0.18);
+  --ui-mesh-2: rgb(34 211 238 / 0.10);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --ui-bg: #f4f4f6;
+  --ui-panel: rgb(255 255 255 / 0.78);
+  --ui-solid: #ffffff;
+  --ui-fg: #121216;
+  --ui-muted: #62626e;
+  --ui-subtle: rgb(0 0 0 / 0.035);
+  --ui-hover: rgb(0 0 0 / 0.06);
+  --ui-border: rgb(0 0 0 / 0.09);
+  --ui-strong: #121216;
+  --ui-on-strong: #ffffff;
+  --ui-accent: #0891b2;
+  --ui-accent-2: #7c3aed;
+  --ui-ring: #0e7490;
+  --ui-danger: #be123c;
+  --ui-success: #047857;
+  --ui-mesh-1: rgb(124 58 237 / 0.08);
+  --ui-mesh-2: rgb(8 145 178 / 0.07);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-ui-bg: var(--ui-bg);
+  --color-ui-panel: var(--ui-panel);
+  --color-ui-solid: var(--ui-solid);
+  --color-ui-fg: var(--ui-fg);
+  --color-ui-muted: var(--ui-muted);
+  --color-ui-subtle: var(--ui-subtle);
+  --color-ui-hover: var(--ui-hover);
+  --color-ui-border: var(--ui-border);
+  --color-ui-strong: var(--ui-strong);
+  --color-ui-on-strong: var(--ui-on-strong);
+  --color-ui-accent: var(--ui-accent);
+  --color-ui-accent-2: var(--ui-accent-2);
+  --color-ui-ring: var(--ui-ring);
+  --color-ui-danger: var(--ui-danger);
+  --color-ui-success: var(--ui-success);
+
+  /* Sitio del cliente: variables inyectadas en .site-root */
+  --color-site-bg: var(--site-bg);
+  --color-site-fg: var(--site-fg);
+  --color-site-muted: var(--site-muted);
+  --color-site-surface: var(--site-surface);
+  --color-site-surface-2: var(--site-surface-2);
+  --color-site-border: var(--site-border);
+  --color-site-primary: var(--site-primary);
+  --color-site-on-primary: var(--site-on-primary);
+  --color-site-primary-ink: var(--site-primary-ink);
+  --color-site-secondary: var(--site-secondary);
+  --color-site-on-secondary: var(--site-on-secondary);
+  --color-site-accent: var(--site-accent);
+  --color-site-on-accent: var(--site-on-accent);
+  --color-site-accent-ink: var(--site-accent-ink);
+  --color-site-focus: var(--site-focus);
+  --font-site: var(--site-font);
+}
+
+/* ---------- Utilidades del estudio ---------- */
+@utility glass {
+  background: var(--ui-panel);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border-color: var(--ui-border);
+}
+
+@utility neon-text {
+  background: linear-gradient(90deg, var(--ui-accent), var(--ui-accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility ui-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-subtle);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--ui-fg);
+  transition: border-color 0.15s, background-color 0.15s;
+  &::placeholder { color: var(--ui-muted); }
+  &:hover { border-color: color-mix(in oklab, var(--ui-fg) 22%, transparent); }
+  &:focus-visible { outline: 2px solid var(--ui-ring); outline-offset: 1px; border-color: transparent; }
+  &[aria-invalid="true"] { border-color: var(--ui-danger); }
+}
+
+@utility ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s, opacity 0.15s, box-shadow 0.2s;
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+@utility ui-btn-primary {
+  background: var(--ui-strong);
+  color: var(--ui-on-strong);
+  &:hover:not(:disabled) { opacity: 0.88; }
+}
+
+@utility ui-btn-ghost {
+  border: 1px solid var(--ui-border);
+  background: var(--ui-subtle);
+  color: var(--ui-fg);
+  &:hover:not(:disabled) { background: var(--ui-hover); }
+}
+
+/* CTA con borde degradado neón */
+@utility ui-btn-neon {
+  position: relative;
+  color: var(--ui-on-strong);
+  background:
+    linear-gradient(var(--ui-strong), var(--ui-strong)) padding-box,
+    linear-gradient(90deg, var(--ui-accent), var(--ui-accent-2)) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 0 24px -6px color-mix(in oklab, var(--ui-accent) 70%, transparent);
+  &:hover:not(:disabled) { box-shadow: 0 0 32px -4px color-mix(in oklab, var(--ui-accent-2) 80%, transparent); }
+}
+
+@utility ui-label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ui-muted);
+}
+
+@layer base {
+  body {
+    margin: 0;
+    background: var(--ui-bg);
+    color: var(--ui-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ui-ring);
+    outline-offset: 2px;
+  }
+
+  button, [role="button"], label[for], summary, select {
+    cursor: pointer;
+  }
+}
+
+.studio-bg {
+  background:
+    radial-gradient(70rem 40rem at 0% -10%, var(--ui-mesh-1), transparent 60%),
+    radial-gradient(60rem 40rem at 110% 0%, var(--ui-mesh-2), transparent 60%),
+    var(--ui-bg);
+}
+
+.canvas-grid {
+  background-image: radial-gradient(color-mix(in oklab, var(--ui-fg) 10%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.5rem;
+  background: var(--ui-strong);
+  color: var(--ui-on-strong);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* ---------- Sitio del cliente ---------- */
+.site-root {
+  --site-muted: color-mix(in oklab, var(--site-fg) 70%, var(--site-bg));
+  --site-surface: color-mix(in oklab, var(--site-fg) 4%, var(--site-bg));
+  --site-surface-2: color-mix(in oklab, var(--site-fg) 8%, var(--site-bg));
+  --site-border: color-mix(in oklab, var(--site-fg) 14%, var(--site-bg));
+  background: var(--site-bg);
+  color: var(--site-fg);
+  font-family: var(--site-font);
+  color-scheme: light dark;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Peso y tracking de títulos según la tipografía elegida */
+.site-root :is(h1, h2, h3) {
+  font-weight: var(--site-heading-weight);
+  letter-spacing: var(--site-heading-tracking);
+}
+
+.site-root :focus-visible {
+  outline: 2px solid var(--site-focus);
+  outline-offset: 2px;
+}
+
+.thin-scroll,
+.site-scroll {
+  scrollbar-width: thin;
+}
+.thin-scroll {
+  scrollbar-color: var(--ui-border) transparent;
+}
+.site-scroll {
+  scrollbar-color: var(--site-border) transparent;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Ajustes táctiles ---------- */
+@media (pointer: coarse) {
+  /* iOS hace zoom al enfocar campos con texto menor a 16px. */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Sin resaltado gris al tocar; el feedback lo dan los estados activos. */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+html,
+body {
+  overscroll-behavior: none;
+}

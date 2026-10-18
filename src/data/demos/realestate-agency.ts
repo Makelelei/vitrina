@@ -1,0 +1,72 @@
+import { Building2, FileCheck2, KeyRound, ShieldCheck } from 'lucide-react';
+import type { DemoDefinition } from '@/types';
+import { BASE_SECTIONS, HOURS } from '../business';
+
+export const realestateAgency: DemoDefinition = {
+  id: 'realestate-agency',
+  category: 'real_estate',
+  name: 'Inmobiliaria',
+  examples: 'Inmobiliarias, desarrolladoras, administraciones',
+  icon: Building2,
+  mode: 'inquiry',
+  defaults: {
+    brandName: 'Norte Propiedades',
+    tagline: 'Encontrá tu próximo lugar.',
+    about: 'Hace más de quince años acompañamos a familias e inversores a comprar, vender y alquilar en zona norte. Tasamos sin cargo y te acompañamos hasta la escritura.',
+    announcement: 'Tasaciones sin cargo en 48 h',
+    preset: 'ocean',
+    layout: 'catalog-grid',
+    checkoutMode: 'whatsapp_only',
+  },
+  copy: {
+    heroKicker: 'Venta · Alquiler · Tasaciones',
+    heroCta: 'Ver propiedades',
+    navCatalog: 'Propiedades',
+    catalogTitle: 'Propiedades',
+    catalogSubtitle: 'Seleccionadas y verificadas por nuestro equipo.',
+    searchPlaceholder: 'Buscar por barrio, ambientes…',
+    itemCta: 'Consultar',
+    featuredTitle: 'Destacadas',
+    aboutTitle: 'Quiénes somos',
+    testimonialsTitle: 'Clientes',
+    deliveryLabel: '',
+    pickupLabel: '',
+    contactTitle: '¿Querés vender o alquilar?',
+    contactText: 'Tasamos tu propiedad sin cargo y te decimos en cuánto tiempo estimamos cerrarla.',
+    contactCta: 'Pedir tasación',
+    cartTitle: 'Consulta',
+    emptyCart: '',
+    messageIntro: 'Me interesa esta propiedad:',
+  },
+  categories: [
+    { id: 'venta', label: 'Venta', emoji: '🏡' },
+    { id: 'alquiler', label: 'Alquiler', emoji: '🔑' },
+    { id: 'emprendimientos', label: 'Emprendimientos', emoji: '🏗️' },
+  ],
+  items: [
+    { id: 'i-palermo', title: 'Departamento con balcón', description: 'Luminoso, al frente, con balcón corrido.', price: 185000, currency: 'USD', category: 'venta', emoji: '🏢', details: ['3 ambientes', '78 m²', 'Palermo'], featured: true },
+    { id: 'i-olivos', title: 'Casa con jardín y pileta', description: 'Lote de 400 m², quincho y cochera doble.', price: 420000, currency: 'USD', category: 'venta', emoji: '🏡', details: ['5 ambientes', '240 m²', 'Olivos'], featured: true },
+    { id: 'i-ph', title: 'PH reciclado', description: 'Sin expensas, terraza propia y parrilla.', price: 158000, currency: 'USD', category: 'venta', emoji: '🏠', details: ['4 ambientes', '110 m²', 'Villa Crespo'] },
+    { id: 'i-alq-2', title: 'Dos ambientes luminoso', description: 'Contrato 3 años. Apto profesional.', price: 650000, currency: 'ARS', priceSuffix: '/mes', category: 'alquiler', emoji: '🔑', details: ['2 ambientes', '52 m²', 'Colegiales'], featured: true },
+    { id: 'i-alq-casa', title: 'Casa en barrio cerrado', description: 'Seguridad 24 h y club house.', price: 1800000, currency: 'ARS', priceSuffix: '/mes', category: 'alquiler', emoji: '🌳', details: ['4 ambientes', '180 m²', 'Nordelta'] },
+    { id: 'i-torre', title: 'Torre Río', description: 'Unidades de 1 a 3 ambientes. Entrega 2028.', price: null, category: 'emprendimientos', emoji: '🏗️', details: ['Desde 38 m²', 'Vicente López'] },
+  ],
+  highlights: [
+    { icon: ShieldCheck, title: 'Propiedades verificadas', text: 'Revisamos títulos y planos.' },
+    { icon: FileCheck2, title: 'Tasación sin cargo', text: 'Valor real de mercado en 48 h.' },
+    { icon: KeyRound, title: 'Hasta la escritura', text: 'Te acompañamos en cada paso.' },
+  ],
+  testimonials: [
+    { quote: 'Vendimos en tres semanas al precio que nos dijeron.', author: 'Familia Benítez', detail: 'Venta en Olivos' },
+    { quote: 'Me ayudaron a alquilar mi primer departamento sin vueltas.', author: 'Nicolás A.', detail: 'Inquilino' },
+    { quote: 'Transparentes con cada número.', author: 'Gabriela S.', detail: 'Inversora' },
+  ],
+  hours: HOURS.office,
+  deliveryZones: [],
+  requestFields: [
+    { id: 'name', label: 'Tu nombre', type: 'text', required: true },
+    { id: 'visit', label: 'Día preferido para visitar', type: 'date' },
+    { id: 'message', label: 'Mensaje', type: 'textarea', placeholder: '¿Acepta mascotas? ¿Es apto crédito?' },
+  ],
+  supports: [...BASE_SECTIONS, 'categoryTiles'],
+};

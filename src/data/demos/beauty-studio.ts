@@ -1,0 +1,76 @@
+import { CalendarCheck, Leaf, Sparkles } from 'lucide-react';
+import type { DemoDefinition } from '@/types';
+import { BASE_SECTIONS, HOURS } from '../business';
+import { choice } from '../variants';
+
+export const beautyStudio: DemoDefinition = {
+  id: 'beauty-studio',
+  category: 'beauty_services',
+  name: 'Peluquería / Barbería / Estética',
+  examples: 'Barberías, peluquerías, spa, uñas, gimnasios',
+  icon: Sparkles,
+  mode: 'booking',
+  defaults: {
+    brandName: 'Estudio Calma',
+    tagline: 'Tu momento de pausa.',
+    about: 'Un espacio tranquilo para cuidarte sin apuro. Turnos espaciados, productos veganos y un equipo que te escucha antes de empezar.',
+    announcement: '15% OFF en tu primer turno reservando online',
+    preset: 'organic-green',
+    layout: 'services-booking',
+    checkoutMode: 'whatsapp_only',
+  },
+  copy: {
+    heroKicker: 'Peluquería · Barbería · Estética',
+    heroCta: 'Reservar turno',
+    navCatalog: 'Servicios',
+    catalogTitle: 'Servicios',
+    catalogSubtitle: 'Elegí un servicio y reservá en 30 segundos.',
+    searchPlaceholder: 'Buscar corte, masaje…',
+    itemCta: 'Reservar',
+    featuredTitle: 'Los más reservados',
+    aboutTitle: 'El estudio',
+    testimonialsTitle: 'Reseñas',
+    deliveryLabel: '',
+    pickupLabel: '',
+    contactTitle: 'Gift cards',
+    contactText: 'Regalá un momento de pausa. Armamos gift cards por servicio o por monto.',
+    contactCta: 'Pedir gift card',
+    cartTitle: 'Reservar turno',
+    emptyCart: '',
+    messageIntro: 'Quiero reservar un turno:',
+  },
+  categories: [
+    { id: 'cabello', label: 'Cabello', emoji: '✂️' },
+    { id: 'barberia', label: 'Barbería', emoji: '💈' },
+    { id: 'manos', label: 'Manos y pies', emoji: '💅' },
+    { id: 'spa', label: 'Spa', emoji: '💆' },
+  ],
+  items: [
+    { id: 'b-corte', title: 'Corte y peinado', description: 'Diagnóstico, lavado, corte y brushing.', price: 18000, category: 'cabello', emoji: '✂️', details: ['60 min'], durationMin: 60, featured: true, variants: [choice('Largo', [['Corto'], ['Medio', 3000], ['Largo', 6000]])] },
+    { id: 'b-color', title: 'Coloración', description: 'Color completo con productos veganos.', price: 32000, category: 'cabello', emoji: '🎨', details: ['120 min'], durationMin: 120 },
+    { id: 'b-barba', title: 'Corte + barba', description: 'Corte, perfilado de barba y toalla caliente.', price: 15000, category: 'barberia', emoji: '💈', details: ['45 min'], durationMin: 45, featured: true },
+    { id: 'b-afeitado', title: 'Afeitado clásico', description: 'Navaja, espuma caliente y bálsamo.', price: 9000, category: 'barberia', emoji: '🪒', details: ['30 min'], durationMin: 30 },
+    { id: 'b-mani', title: 'Manicura semipermanente', description: 'Limado, cutículas y esmaltado.', price: 12000, category: 'manos', emoji: '💅', details: ['50 min'], durationMin: 60, featured: true },
+    { id: 'b-pedi', title: 'Pedicura spa', description: 'Baño de pies, exfoliación y esmaltado.', price: 16000, category: 'manos', emoji: '🦶', details: ['60 min'], durationMin: 60 },
+    { id: 'b-facial', title: 'Limpieza facial profunda', description: 'Extracción, máscara y masaje facial.', price: 22000, category: 'spa', emoji: '🧖', details: ['75 min'], durationMin: 90 },
+    { id: 'b-masaje', title: 'Masaje descontracturante', description: 'Espalda, cuello y hombros.', price: 24000, category: 'spa', emoji: '💆', details: ['50 min'], durationMin: 60 },
+  ],
+  highlights: [
+    { icon: CalendarCheck, title: 'Turnos sin espera', text: 'Agenda espaciada: llegás y te atendemos.' },
+    { icon: Leaf, title: 'Productos veganos', text: 'Libres de crueldad y de parabenos.' },
+    { icon: Sparkles, title: 'Equipo con experiencia', text: 'Más de 10 años en cada especialidad.' },
+  ],
+  testimonials: [
+    { quote: 'Salí renovada. El lugar es hermoso y súper tranquilo.', author: 'Camila T.', detail: 'Limpieza facial' },
+    { quote: 'Por fin una barbería donde no te apuran.', author: 'Mateo B.', detail: 'Corte + barba' },
+    { quote: 'Reservar online es comodísimo, me confirman en minutos.', author: 'Laura K.', detail: 'Clienta mensual' },
+  ],
+  hours: HOURS.salon,
+  deliveryZones: [],
+  requestFields: [
+    { id: 'name', label: 'Tu nombre', type: 'text', required: true },
+    { id: 'phone', label: 'Teléfono', type: 'tel', placeholder: 'Para confirmarte el turno' },
+    { id: 'notes', label: 'Comentarios', type: 'textarea', placeholder: 'Preferencia de profesional, alergias…' },
+  ],
+  supports: BASE_SECTIONS,
+};
