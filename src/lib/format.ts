@@ -1,4 +1,5 @@
 import type { CatalogItem, Currency } from '@/types';
+import { APP_CONFIG } from '@/config/app';
 
 const formatters: Record<Currency, Intl.NumberFormat> = {
   ARS: new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }),
@@ -25,6 +26,16 @@ export const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '') || 'mi-negocio';
 
-export const siteUrl = (brandName: string) => `https://${slugify(brandName)}.vitrina.app`;
+/** Solo enlaces https absolutos: evita abrir esquemas peligrosos (javascript:, data:…). */
+export function isHttpsUrl(value: string | undefined): value is string {
+  if (!value) return false;
+  try {
+    return new URL(value).protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+export const siteUrl = (brandName: string) => `https://${slugify(brandName)}.${APP_CONFIG.sitesDomain}`;
 
 export const uid = (prefix: string) => `${prefix}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;

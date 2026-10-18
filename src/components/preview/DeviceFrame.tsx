@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { slugify } from '@/lib/format';
+import { siteUrl } from '@/lib/format';
 import { useSiteBuilderStore } from '@/store/useSiteBuilderStore';
 import { useElementSize } from '@/hooks/useElementSize';
 
@@ -65,7 +65,7 @@ export function DesktopFrame({ children }: { children: ReactNode }) {
           <span className="size-2.5 rounded-full bg-[#28c840]" />
         </div>
         <div className="mx-auto min-w-0 max-w-sm flex-1 truncate rounded-md bg-ui-subtle px-3 py-1 text-center text-[11px] text-ui-muted">
-          {slugify(brandName)}.vitrina.app
+          {siteUrl(brandName).replace('https://', '')}
         </div>
         <span className="hidden w-10 sm:block" />
       </div>

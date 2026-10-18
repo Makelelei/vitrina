@@ -3,3 +3,6 @@ dist
 *.local
 .DS_Store
 *.zip
+.env
+clients/
+vitrina-config.php

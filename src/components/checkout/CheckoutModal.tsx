@@ -7,14 +7,12 @@ import type { LeadContact, LeadRecord } from '@/lib/leads';
 import type { PlanId } from '@/types';
 import { SummaryStep } from './SummaryStep';
 import { LeadFormStep } from './LeadFormStep';
-import { SubscriptionStep } from './SubscriptionStep';
 import { SuccessStep } from './SuccessStep';
 
-type Step = 'summary' | 'lead' | 'payment' | 'success';
+type Step = 'summary' | 'lead' | 'success';
 const STEPS: { id: Step; label: string }[] = [
   { id: 'summary', label: 'Resumen' },
   { id: 'lead', label: 'Tus datos' },
-  { id: 'payment', label: 'Suscripción' },
   { id: 'success', label: 'Listo' },
 ];
 
@@ -68,7 +66,7 @@ export function CheckoutModal() {
                     </Dialog.Close>
                   </header>
 
-                  <div aria-hidden="true" className="grid grid-cols-4 gap-1 px-6 pt-4">
+                  <div aria-hidden="true" className="grid grid-cols-3 gap-1 px-6 pt-4">
                     {STEPS.map((s, i) => (
                       <span key={s.id} className={`h-0.5 rounded-full transition-colors ${i <= stepIndex ? 'bg-gradient-to-r from-ui-accent to-ui-accent-2' : 'bg-ui-border'}`} />
                     ))}
@@ -80,19 +78,10 @@ export function CheckoutModal() {
                         {step === 'summary' && <SummaryStep plan={plan} onPlanChange={setPlan} onContinue={() => setStep('lead')} />}
                         {step === 'lead' && (
                           <LeadFormStep
+                            plan={plan}
                             initial={contact}
                             onBack={() => setStep('summary')}
-                            onContinue={(c) => {
-                              setContact(c);
-                              setStep('payment');
-                            }}
-                          />
-                        )}
-                        {step === 'payment' && contact && (
-                          <SubscriptionStep
-                            plan={plan}
-                            contact={contact}
-                            onBack={() => setStep('lead')}
+                            onContactChange={setContact}
                             onSuccess={(record) => {
                               setLead(record);
                               setStep('success');

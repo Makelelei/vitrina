@@ -2,7 +2,8 @@ import { CreditCard, MessageCircle, Shuffle } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useSiteBuilderStore } from '@/store/useSiteBuilderStore';
 import { useDemo } from '@/hooks/useDemo';
-import { formatPrice } from '@/lib/format';
+import { formatPrice, isHttpsUrl } from '@/lib/format';
+import { TextField } from '@/components/ui/TextField';
 import type { CheckoutMode, PaymentProvider } from '@/types';
 import { Switch } from '@/components/ui/Switch';
 import { PanelGroup } from './PanelGroup';
@@ -59,7 +60,7 @@ export function ConversionTab() {
       </PanelGroup>
 
       {!inquiryOnly && s.checkoutMode !== 'whatsapp_only' && (
-        <PanelGroup focus={SPOT.catalog} title="Procesador de pagos" description="Simulado en esta demo: no se cobra nada.">
+        <PanelGroup focus={SPOT.catalog} title="Procesador de pagos" description="En la vista previa el pago es simulado. En el sitio publicado se usa el link del negocio.">
           <RadioCardGroup
             legend="Procesador"
             hideLegend
@@ -75,6 +76,16 @@ export function ConversionTab() {
                 </span>
               ),
             }))}
+          />
+          <TextField
+            label="Link de pago del negocio"
+            type="url"
+            inputMode="url"
+            value={s.conversion.paymentLinkUrl ?? ''}
+            placeholder="https://mpago.la/..."
+            onValueChange={(v) => s.updateConversion({ paymentLinkUrl: v.trim() || undefined })}
+            hint="Link de Mercado Pago o Stripe del negocio: el dinero lo cobra directamente el negocio."
+            error={s.conversion.paymentLinkUrl && !isHttpsUrl(s.conversion.paymentLinkUrl) ? 'Tiene que ser un link https:// válido.' : undefined}
           />
           {demo.mode === 'booking' && (
             <label className="flex items-center justify-between gap-3 text-sm">

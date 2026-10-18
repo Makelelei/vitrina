@@ -3,7 +3,8 @@ import { useId } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useSiteBuilderStore } from '@/store/useSiteBuilderStore';
 import { useSiteUiStore, type PaymentIntent } from '@/store/useSiteUiStore';
-import { formatPrice } from '@/lib/format';
+import { formatPrice, isHttpsUrl } from '@/lib/format';
+import { getAppMode } from '@/config/app';
 import { buildWhatsAppUrl, isValidWhatsApp } from '@/lib/whatsapp';
 import type { Currency } from '@/types';
 
@@ -29,14 +30,22 @@ interface Props {
  * solo WhatsApp, solo link de pago, o ambos (híbrido).
  */
 export function CheckoutActions({ problems, buildMessage, amount, currency = 'ARS', description, kind, waLabel, payLabel, onBeforePay, onPaid }: Props) {
-  const { checkoutMode, provider, whatsapp } = useSiteBuilderStore(
-    useShallow((s) => ({ checkoutMode: s.checkoutMode, provider: s.conversion.paymentProvider, whatsapp: s.brandDetails.whatsapp })),
+  const { checkoutMode, provider, whatsapp, paymentLinkUrl } = useSiteBuilderStore(
+    useShallow((s) => ({
+      checkoutMode: s.checkoutMode,
+      provider: s.conversion.paymentProvider,
+      whatsapp: s.brandDetails.whatsapp,
+      paymentLinkUrl: s.conversion.paymentLinkUrl,
+    })),
   );
   const startPayment = useSiteUiStore((s) => s.startPayment);
   const problemsId = useId();
 
-  const canPay = amount > 0 && checkoutMode !== 'whatsapp_only';
-  const showWhatsApp = checkoutMode !== 'payment_link' || amount <= 0;
+  // Estudio: pago simulado. Sitio publicado: link real del negocio + WhatsApp para confirmar.
+  const published = getAppMode() === 'published';
+  const realLink = published && isHttpsUrl(paymentLinkUrl) ? paymentLinkUrl : null;
+  const canPay = amount > 0 && checkoutMode !== 'whatsapp_only' && (!published || realLink !== null);
+  const showWhatsApp = published || checkoutMode !== 'payment_link' || amount <= 0;
   const allProblems = [...problems];
   if (showWhatsApp && !isValidWhatsApp(whatsapp)) allProblems.push('El negocio no tiene un WhatsApp válido configurado.');
   const blocked = allProblems.length > 0;
@@ -58,7 +67,22 @@ export function CheckoutActions({ problems, buildMessage, amount, currency = 'AR
         </ul>
       )}
 
-      {canPay && (
+      {canPay && realLink && (
+        <a
+          href={realLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-disabled={blocked || undefined}
+          onClick={(e) => blocked && e.preventDefault()}
+          className={`${primary} ${blocked ? 'pointer-events-none bg-site-surface-2 text-site-muted' : 'bg-site-fg text-site-bg hover:opacity-90'}`}
+        >
+          <CreditCard className="size-4" aria-hidden="true" />
+          {payLabel} · {formatPrice(amount, currency)}
+          <span className="sr-only">(abre el pago en una pestaña nueva)</span>
+        </a>
+      )}
+
+      {canPay && !realLink && (
         <button
           type="button"
           onClick={pay}
@@ -92,7 +116,9 @@ export function CheckoutActions({ problems, buildMessage, amount, currency = 'AR
 
       {canPay && (
         <p className="text-center text-[11px] text-site-muted">
-          Pago seguro con {PROVIDER_LABEL[provider]} {checkoutMode === 'hybrid' && '· o coordiná por WhatsApp'}
+          {realLink
+            ? 'Después de pagar, enviá el pedido por WhatsApp para confirmarlo'
+            : `Pago seguro con ${PROVIDER_LABEL[provider]}${checkoutMode === 'hybrid' ? ' · o coordiná por WhatsApp' : ''}`}
         </p>
       )}
     </>

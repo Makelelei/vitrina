@@ -8,6 +8,15 @@ export default defineConfig({
   // una subcarpeta como GitHub Pages (makelelei.github.io/vitrina/).
   base: './',
   plugins: [react(), tailwindcss()],
+  build: {
+    // Dos entradas: el estudio (index.html) y el sitio publicado de cada cliente (site.html).
+    rollupOptions: {
+      input: {
+        studio: fileURLToPath(new URL('./index.html', import.meta.url)),
+        site: fileURLToPath(new URL('./site.html', import.meta.url)),
+      },
+    },
+  },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },

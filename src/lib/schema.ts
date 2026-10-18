@@ -71,7 +71,8 @@ const isConversion = (v: unknown): v is ConversionSettings =>
   isOneOf(['mercadopago', 'stripe'] as const)(v.paymentProvider) &&
   isBoolean(v.bookingsEnabled) &&
   isBoolean(v.deliveryEnabled) &&
-  isNumber(v.depositPercent);
+  isNumber(v.depositPercent) &&
+  (v.paymentLinkUrl === undefined || isString(v.paymentLinkUrl));
 
 const isAnnouncement = (v: unknown): v is Announcement => isRecord(v) && isBoolean(v.enabled) && isString(v.text);
 

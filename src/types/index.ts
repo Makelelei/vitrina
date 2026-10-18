@@ -57,6 +57,8 @@ export interface ConversionSettings {
   deliveryEnabled: boolean;
   /** Seña que se cobra al reservar con link de pago (porcentaje). */
   depositPercent: number;
+  /** Link de cobro real del negocio (p. ej. Mercado Pago). Se usa en el sitio publicado. */
+  paymentLinkUrl?: string;
 }
 
 /* ============================================================
