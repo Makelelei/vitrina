@@ -6,10 +6,11 @@ Cómo funciona el negocio día a día: desde que un cliente pide su sitio hasta 
 
 | Qué | Dónde |
 |---|---|
-| Estudio (lo que ven los clientes) | https://mistyrose-bison-823666.hostingersite.com *(subdominio temporal hasta comprar el dominio de Vitrina)* |
-| Panel de solicitudes | `/admin/` del mismo dominio · contraseña guardada aparte (no se versiona) |
+| Estudio (lo que ven los clientes) | https://armatuvitrina.com |
+| Panel de solicitudes | https://armatuvitrina.com/admin/ · contraseña guardada aparte (no se versiona) |
 | Código | https://github.com/Makelelei/vitrina |
-| Hosting | hPanel de Hostinger → sitio `mistyrose-bison-823666.hostingersite.com` (separado de alvacio.net) |
+| Hosting | hPanel de Hostinger → sitio `armatuvitrina.com` (separado de alvacio.net) |
+| Email de avisos | hola@armatuvitrina.com |
 | Base de datos | `u454816136_vitrina` (separada de la de alvacio) |
 
 ## Cuando llega una solicitud
@@ -32,7 +33,7 @@ Cómo funciona el negocio día a día: desde que un cliente pide su sitio hasta 
    npm run client -- ruta/al/vitrina-negocio.json
    ```
    Queda lista en `clients/<negocio>/`.
-8. **Publicalo en Hostinger** (subdominio del dominio de Vitrina o dominio propio del cliente): subí todo el contenido de `clients/<negocio>/`, incluido `.htaccess`.
+8. **Publicalo en Hostinger** (subdominio `negocio.armatuvitrina.com` o dominio propio del cliente): subí todo el contenido de `clients/<negocio>/`, incluido `.htaccess`.
 9. **Revisión con el cliente**: pasale el link, hasta 2 rondas de cambios. Para cambios de contenido alcanza con volver a subir `site.json`.
 10. **Entrega final** → estado *Publicado*. Mandale:
     - El link del sitio funcionando.
@@ -51,7 +52,8 @@ Cómo funciona el negocio día a día: desde que un cliente pide su sitio hasta 
 
 ## Pendientes del negocio (no técnicos)
 
-- [ ] Comprar el dominio de Vitrina (ej: `vitrinastudio.online`, `armatuvitrina.com`) y crear `hola@<dominio>`.
+- [x] Dominio `armatuvitrina.com` (vence el 18/10/2027).
+- [ ] Crear la casilla `hola@armatuvitrina.com` en hPanel → Emails.
 - [ ] Inscripción en monotributo (ARCA) para emitir factura C.
 - [ ] Número de WhatsApp Business de Vitrina (se configura en `VITE_OWNER_WHATSAPP`).
 - [ ] Agregar razón social/CUIT en `public/terminos.html` y `public/privacidad.html` una vez inscripto.

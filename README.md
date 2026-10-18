@@ -34,7 +34,7 @@ Las 4 plantillas (`interactive-menu`, `catalog-grid`, `services-booking`, `minim
   - Foco visible y anuncios `aria-live`.
   - Respeta `prefers-reduced-motion`.
 
-**Demo en vivo:** https://makelelei.github.io/vitrina/
+**Producción:** https://armatuvitrina.com · **Demo:** https://makelelei.github.io/vitrina/
 
 ## Scripts
 

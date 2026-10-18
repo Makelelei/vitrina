@@ -90,7 +90,8 @@ function db(array $config): PDO
 $error = '';
 if (($_POST['action'] ?? '') === 'login') {
     $hash = (string) ($config['admin_password_hash'] ?? '');
-    if ($hash !== '' && password_verify((string) ($_POST['password'] ?? ''), $hash)) {
+    // trim: al copiar y pegar la contraseña suelen colarse espacios o saltos de línea.
+    if ($hash !== '' && password_verify(trim((string) ($_POST['password'] ?? '')), $hash)) {
         session_regenerate_id(true);
         $_SESSION['auth'] = true;
         header('Location: ./');
@@ -172,6 +173,7 @@ if ($authed) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Solicitudes · Vitrina</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <style>
   :root { color-scheme: dark; --bg:#07070a; --panel:#121218; --fg:#ececf1; --muted:#9b9ba8; --border:#26262e; --accent:#22d3ee; }
   * { box-sizing: border-box; }
@@ -201,12 +203,13 @@ if ($authed) {
 <body>
 <main>
 <?php if (!$authed): ?>
-  <form method="post" class="card login" autocomplete="off">
+  <form method="post" class="card login">
     <h1>Vitrina · Panel</h1>
     <p class="muted">Ingresá la contraseña de administración.</p>
     <input type="hidden" name="action" value="login">
     <label for="password" class="muted">Contraseña</label>
-    <input id="password" name="password" type="password" required autofocus style="width:100%;margin:6px 0 12px">
+    <input type="text" name="username" value="admin" autocomplete="username" hidden>
+    <input id="password" name="password" type="password" autocomplete="current-password" required autofocus style="width:100%;margin:6px 0 12px">
     <?php if ($error): ?><p class="err" role="alert"><?= e($error) ?></p><?php endif; ?>
     <button type="submit" style="width:100%">Entrar</button>
   </form>
