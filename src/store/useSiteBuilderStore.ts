@@ -20,7 +20,8 @@ import { DEFAULT_LOCATION, DEFAULT_SECTIONS } from '@/data/business';
 import { findPreset } from '@/presets/styles';
 import { isValidHex, normalizeHex } from '@/lib/color';
 import { uid } from '@/lib/format';
-import { safeJSONStorage } from './safeStorage';
+import { readDemoId, sanitizeConfig } from '@/lib/schema';
+import { reportRepaired, safeJSONStorage } from './safeStorage';
 import { useCartStore } from './useCartStore';
 import { useSiteUiStore } from './useSiteUiStore';
 
@@ -199,8 +200,20 @@ export const useSiteBuilderStore = create<SiteBuilderStore>()(
       version: 1,
       storage: safeJSONStorage,
       partialize: (state) => selectConfig(state),
-      // Esquema desconocido: se arranca con la demo por defecto.
-      migrate: () => buildDemoConfig() as unknown as SiteBuilderStore,
+      // Las versiones futuras transforman acá; la validación de forma la hace `merge`.
+      migrate: (persisted) => persisted as SiteBuilderStore,
+      // Valida lo guardado campo por campo: conserva lo válido y repone solo lo dañado.
+      merge: (persisted, current) => {
+        if (persisted === undefined) return current;
+        const { config, repaired } = sanitizeConfig(persisted, buildDemoConfig(readDemoId(persisted)));
+        if (repaired.length) {
+          reportRepaired(repaired);
+          // Reescribe la versión reparada para no volver a cargar el dato dañado
+          // (en microtarea: durante la hidratación el store todavía no existe).
+          queueMicrotask(() => useSiteBuilderStore.setState({}));
+        }
+        return { ...current, ...config };
+      },
     },
   ),
 );

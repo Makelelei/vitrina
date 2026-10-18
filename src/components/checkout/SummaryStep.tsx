@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { ArrowRight, Check, FileJson } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useSiteBuilderStore, selectConfig } from '@/store/useSiteBuilderStore';
 import { findPreset } from '@/presets/styles';
 import { findFont } from '@/presets/fonts';
@@ -20,7 +21,18 @@ interface Props {
 }
 
 export function SummaryStep({ plan, onPlanChange, onContinue }: Props) {
-  const c = useSiteBuilderStore((s) => s);
+  // Selectores granulares: el resumen solo se re-renderiza si cambia algo que muestra.
+  const c = useSiteBuilderStore(
+    useShallow((s) => ({
+      demoId: s.demoId,
+      businessCategory: s.businessCategory,
+      layoutTemplate: s.layoutTemplate,
+      themeSettings: s.themeSettings,
+      productsOrServices: s.productsOrServices,
+      checkoutMode: s.checkoutMode,
+      brandDetails: s.brandDetails,
+    })),
+  );
   const demo = DEMOS[c.demoId];
   const t = c.themeSettings;
   const variants = c.productsOrServices.filter((i) => i.variants?.length).length;
@@ -62,7 +74,7 @@ export function SummaryStep({ plan, onPlanChange, onContinue }: Props) {
         </dl>
         <button
           type="button"
-          onClick={() => downloadJson(`vitrina-${slugify(c.brandDetails.name)}.json`, buildExport(selectConfig(c)))}
+          onClick={() => downloadJson(`vitrina-${slugify(c.brandDetails.name)}.json`, buildExport(selectConfig(useSiteBuilderStore.getState())))}
           className="mt-3 inline-flex items-center gap-1.5 text-xs text-ui-muted underline-offset-4 hover:text-ui-fg hover:underline"
         >
           <FileJson className="size-3.5" aria-hidden="true" />

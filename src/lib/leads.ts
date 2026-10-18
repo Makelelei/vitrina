@@ -1,4 +1,5 @@
 import type { PlanId, SiteConfig } from '@/types';
+import { isRecord } from './schema';
 
 const STORAGE_KEY = 'vitrina-leads';
 
@@ -27,13 +28,36 @@ export async function submitLead(input: Omit<LeadRecord, 'id' | 'createdAt'>): P
   await delay(700);
   const record: LeadRecord = { ...input, id: `VT-${Date.now().toString(36).toUpperCase()}`, createdAt: new Date().toISOString() };
   try {
-    const list: LeadRecord[] = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
-    list.push(record);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-  } catch {
-    // Almacenamiento no disponible o lleno: el flujo continúa igual.
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...readLeads(), record]));
+  } catch (error) {
+    // Almacenamiento no disponible o lleno: el lead se devuelve igual y el flujo continúa.
+    console.warn('[vitrina] No se pudo guardar el lead localmente:', error);
   }
   return record;
+}
+
+const isLeadRecord = (v: unknown): v is LeadRecord =>
+  isRecord(v) &&
+  typeof v.id === 'string' &&
+  typeof v.createdAt === 'string' &&
+  (v.plan === 'basico' || v.plan === 'pro') &&
+  isRecord(v.contact) &&
+  ['name', 'email', 'phone'].every((k) => typeof (v.contact as Record<string, unknown>)[k] === 'string') &&
+  isRecord(v.config);
+
+/** Lee los leads guardados descartando entradas inválidas (JSON dañado o editado a mano). */
+export function readLeads(): LeadRecord[] {
+  let raw: unknown;
+  try {
+    raw = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
+  } catch (error) {
+    console.warn('[vitrina] Leads guardados ilegibles; se descartan:', error);
+    return [];
+  }
+  if (!Array.isArray(raw)) return [];
+  const valid = raw.filter(isLeadRecord);
+  if (valid.length !== raw.length) console.warn(`[vitrina] Se descartaron ${raw.length - valid.length} leads inválidos.`);
+  return valid;
 }
 
 /** Simula la aprobación de un pago con tarjeta / link de pago. */
