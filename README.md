@@ -34,6 +34,8 @@ Las 4 plantillas (`interactive-menu`, `catalog-grid`, `services-booking`, `minim
   - Foco visible y anuncios `aria-live`.
   - Respeta `prefers-reduced-motion`.
 
+**Demo en vivo:** https://makelelei.github.io/vitrina/
+
 ## Scripts
 
 ```bash
@@ -41,6 +43,7 @@ npm install
 npm run dev        # http://localhost:5173
 npm run typecheck
 npm run build      # typecheck + build de producción en dist/
+npm run deploy     # compila y publica en GitHub Pages (rama gh-pages)
 ```
 
 ## Estructura

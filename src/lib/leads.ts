@@ -25,7 +25,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  */
 export async function submitLead(input: Omit<LeadRecord, 'id' | 'createdAt'>): Promise<LeadRecord> {
   await delay(700);
-  const record: LeadRecord = { ...input, id: `FS-${Date.now().toString(36).toUpperCase()}`, createdAt: new Date().toISOString() };
+  const record: LeadRecord = { ...input, id: `VT-${Date.now().toString(36).toUpperCase()}`, createdAt: new Date().toISOString() };
   try {
     const list: LeadRecord[] = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
     list.push(record);

@@ -17,7 +17,7 @@ export function AppHeader() {
 
   return (
     <header className="glass relative z-20 grid h-14 shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b px-3 lg:px-4">
-      <div className="flex min-w-0 items-center gap-2">
+      <div className="flex min-w-0 items-center gap-2 overflow-hidden">
         <button
           type="button"
           onClick={toggleSidebar}
@@ -34,11 +34,11 @@ export function AppHeader() {
         <span className="sm:hidden">
           <Logo showText={false} />
         </span>
-        <span aria-hidden="true" className="hidden h-5 w-px bg-ui-border md:block" />
+        <span aria-hidden="true" className="hidden h-5 w-px bg-ui-border lg:block" />
         <button
           type="button"
           onClick={() => setOnboarded(false)}
-          className="hidden min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-sm text-ui-muted transition-colors hover:bg-ui-hover hover:text-ui-fg md:inline-flex"
+          className="hidden min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-sm text-ui-muted transition-colors hover:bg-ui-hover hover:text-ui-fg lg:inline-flex"
         >
           <category.icon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden="true" />
           <span className="truncate">{category.name}</span>
