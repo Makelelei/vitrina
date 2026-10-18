@@ -9,6 +9,8 @@ import type { ColorKey } from '@/types';
 import { TextArea, TextField } from '@/components/ui/TextField';
 import { ImageUpload } from '@/components/ui/ImageUpload';
 import { PanelGroup } from './PanelGroup';
+import { SPOT } from '@/lib/spotlight';
+import { useSiteUiStore } from '@/store/useSiteUiStore';
 import { RadioCardGroup } from './RadioCardGroup';
 import { ColorField } from './ColorField';
 
@@ -32,18 +34,25 @@ export function IdentityTab() {
     })),
   );
   const [customOpen, setCustomOpen] = useState(false);
+  const focusPreview = useSiteUiStore((st) => st.focusPreview);
   const customId = useId();
 
   return (
     <>
-      <PanelGroup title="Marca">
+      <PanelGroup focus={SPOT.brand} title="Marca">
         <ImageUpload label="Logo" value={s.brand.logoUrl} onChange={(logoUrl) => s.updateBrand({ logoUrl })} maxSize={320} hint="Se muestra en la navegación. Ideal: PNG o SVG con fondo transparente." />
         <TextField label="Nombre del negocio" value={s.brand.name} maxLength={40} onValueChange={(name) => s.updateBrand({ name })} />
-        <TextField label="Eslogan" value={s.brand.tagline} maxLength={80} onValueChange={(tagline) => s.updateBrand({ tagline })} />
-        {s.aboutOn && <TextArea label="Sobre nosotros" value={s.brand.about} maxLength={360} rows={4} onValueChange={(about) => s.updateBrand({ about })} />}
+        <div onFocusCapture={() => focusPreview(SPOT.hero)}>
+          <TextField label="Eslogan" value={s.brand.tagline} maxLength={80} onValueChange={(tagline) => s.updateBrand({ tagline })} />
+        </div>
+        {s.aboutOn && (
+          <div onFocusCapture={() => focusPreview(SPOT.about)}>
+            <TextArea label="Sobre nosotros" value={s.brand.about} maxLength={360} rows={4} onValueChange={(about) => s.updateBrand({ about })} />
+          </div>
+        )}
       </PanelGroup>
 
-      <PanelGroup title="Estilo en 1 clic" description="Paleta y tipografía combinadas.">
+      <PanelGroup focus={SPOT.hero} title="Estilo en 1 clic" description="Paleta y tipografía combinadas.">
         <RadioCardGroup
           legend="Estilos predefinidos"
           hideLegend
@@ -72,7 +81,7 @@ export function IdentityTab() {
         />
       </PanelGroup>
 
-      <PanelGroup title="Colores">
+      <PanelGroup focus={SPOT.hero} title="Colores">
         <button
           type="button"
           onClick={() => setCustomOpen((o) => !o)}
@@ -105,7 +114,7 @@ export function IdentityTab() {
         )}
       </PanelGroup>
 
-      <PanelGroup title="Tipografía">
+      <PanelGroup focus={SPOT.hero} title="Tipografía">
         <RadioCardGroup
           legend="Tipografía"
           hideLegend

@@ -6,6 +6,8 @@ import { LAYOUTS, findLayout } from '@/presets/layouts';
 import type { BusinessCategory, DemoId, LayoutTemplate, SectionKey } from '@/types';
 import { Switch } from '@/components/ui/Switch';
 import { PanelGroup } from './PanelGroup';
+import { SECTION_SPOT, SPOT } from '@/lib/spotlight';
+import { useSiteUiStore } from '@/store/useSiteUiStore';
 import { RadioCardGroup } from './RadioCardGroup';
 import { CategoryGrid } from './CategoryGrid';
 
@@ -82,6 +84,7 @@ export function CategoryTab() {
       setSection: st.setSection,
     })),
   );
+  const focusPreview = useSiteUiStore((st) => st.focusPreview);
   const demo = DEMOS[s.demoId];
   const demos = CATEGORIES[s.category].demos;
 
@@ -91,12 +94,12 @@ export function CategoryTab() {
 
   return (
     <>
-      <PanelGroup title="Rubro" description="Cambia la demo, los textos y el catálogo de ejemplo.">
+      <PanelGroup focus={SPOT.top} title="Rubro" description="Cambia la demo, los textos y el catálogo de ejemplo.">
         <CategoryGrid value={s.category} onSelect={changeCategory} compact />
       </PanelGroup>
 
       {demos.length > 1 && (
-        <PanelGroup title="Demo del rubro">
+        <PanelGroup focus={SPOT.top} title="Demo del rubro">
           <RadioCardGroup
             legend="Demo"
             hideLegend
@@ -119,7 +122,7 @@ export function CategoryTab() {
         </PanelGroup>
       )}
 
-      <PanelGroup title="Plantilla" description={`Recomendada para ${demo.name.toLowerCase()}: ${findLayout(demo.defaults.layout).name}`}>
+      <PanelGroup focus={SPOT.top} title="Plantilla" description={`Recomendada para ${demo.name.toLowerCase()}: ${findLayout(demo.defaults.layout).name}`}>
         <RadioCardGroup
           legend="Plantilla del sitio"
           hideLegend
@@ -156,7 +159,10 @@ export function CategoryTab() {
                 description={supported ? SECTION_LABELS[key][1] : 'No aplica a este rubro'}
                 checked={supported && s.sections[key]}
                 disabled={!supported}
-                onCheckedChange={(v) => s.setSection(key, v)}
+                onCheckedChange={(v) => {
+                  s.setSection(key, v);
+                  if (v) focusPreview(SECTION_SPOT[key]);
+                }}
               />
             );
           })}

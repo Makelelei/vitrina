@@ -10,6 +10,8 @@ import { TextArea, TextField } from '@/components/ui/TextField';
 import { Switch } from '@/components/ui/Switch';
 import { ImageUpload } from '@/components/ui/ImageUpload';
 import { PanelGroup } from './PanelGroup';
+import { SPOT } from '@/lib/spotlight';
+import { useSiteUiStore } from '@/store/useSiteUiStore';
 
 export function ContentTab() {
   const s = useSiteBuilderStore(
@@ -30,7 +32,7 @@ export function ContentTab() {
 
   return (
     <>
-      <PanelGroup title="Contacto">
+      <PanelGroup focus={SPOT.info} title="Contacto">
         <TextField
           label="WhatsApp del negocio"
           type="tel"
@@ -47,7 +49,7 @@ export function ContentTab() {
         </div>
       </PanelGroup>
 
-      <PanelGroup title="Anuncio superior">
+      <PanelGroup focus={SPOT.announcement} title="Anuncio superior">
         <Switch label="Mostrar barra de anuncio" checked={s.announcement.enabled} onCheckedChange={(enabled) => s.updateAnnouncement({ enabled })} />
         {s.announcement.enabled && <TextField label="Texto del anuncio" value={s.announcement.text} maxLength={90} onValueChange={(text) => s.updateAnnouncement({ text })} />}
       </PanelGroup>
@@ -62,7 +64,7 @@ export function ContentTab() {
       {s.categories.map((cat) => {
         const items = s.items.filter((i) => i.category === cat.id);
         return (
-          <PanelGroup
+          <PanelGroup focus={SPOT.catalog}
             key={cat.id}
             title={`${cat.emoji ? `${cat.emoji} ` : ''}${cat.label} · ${items.length}`}
             action={
@@ -89,7 +91,7 @@ export function ContentTab() {
         );
       })}
 
-      <PanelGroup title="Nueva categoría">
+      <PanelGroup focus={SPOT.catalog} title="Nueva categoría">
         <form
           className="flex gap-2"
           onSubmit={(e) => {
@@ -117,13 +119,15 @@ function ItemRow({ item, expanded, onToggle }: { item: CatalogItem; expanded: bo
   const [detailsText, setDetailsText] = useState((item.details ?? []).join(', '));
   const regionId = useId();
   const categoryId = useId();
+  const focusPreview = useSiteUiStore((s) => s.focusPreview);
+  const showInPreview = () => focusPreview(SPOT.item(item.id));
   const update = (patch: Partial<CatalogItem>) => updateItem(item.id, patch);
   const num = (v: string) => (v === '' ? null : Math.max(0, Number(v)));
 
   return (
     <li className={`rounded-md ${expanded ? 'bg-ui-subtle ring-1 ring-ui-border' : ''}`}>
       <div className="flex items-center gap-1">
-        <button type="button" onClick={onToggle} aria-expanded={expanded} aria-controls={regionId} className="flex min-w-0 flex-1 items-center gap-2 rounded-md px-1 py-1.5 text-left hover:bg-ui-hover">
+        <button type="button" onClick={() => { onToggle(); if (!expanded) showInPreview(); }} aria-expanded={expanded} aria-controls={regionId} className="flex min-w-0 flex-1 items-center gap-2 rounded-md px-1 py-1.5 text-left hover:bg-ui-hover">
           <ChevronRight className={`size-3.5 shrink-0 text-ui-muted transition-transform ${expanded ? 'rotate-90' : ''}`} aria-hidden="true" />
           {item.image ? <img src={item.image} alt="" className="size-5 rounded object-cover" /> : <span aria-hidden="true" className="text-base leading-none">{item.emoji}</span>}
           <span className="min-w-0 flex-1 truncate text-sm">{item.title || 'Sin nombre'}</span>
@@ -136,7 +140,7 @@ function ItemRow({ item, expanded, onToggle }: { item: CatalogItem; expanded: bo
       </div>
 
       {expanded && (
-        <div id={regionId} className="space-y-3 px-2 pb-3 pt-1">
+        <div id={regionId} onFocusCapture={showInPreview} className="space-y-3 px-2 pb-3 pt-1">
           <ImageUpload label="Imagen" value={item.image} onChange={(image) => update({ image })} compact hint="Se comprime automáticamente." />
           <div className="grid grid-cols-[3.5rem_1fr] gap-2">
             <TextField label="Ícono" value={item.emoji} maxLength={4} onValueChange={(v) => update({ emoji: v || '✨' })} />

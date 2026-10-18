@@ -3,6 +3,9 @@ import { persist } from 'zustand/middleware';
 import type { DeviceMode, StudioTheme } from '@/types';
 import { safeJSONStorage } from './safeStorage';
 
+/** Altura del editor en móvil: compacta (se ve la vista previa) o expandida. */
+export type MobilePanelSize = 'compact' | 'full';
+
 interface UiStore {
   theme: StudioTheme;
   onboarded: boolean;
@@ -12,12 +15,14 @@ interface UiStore {
   sidebarCollapsed: boolean;
   checkoutOpen: boolean;
   mobilePanelOpen: boolean;
+  mobilePanelSize: MobilePanelSize;
   setTheme: (theme: StudioTheme) => void;
   setOnboarded: (value: boolean) => void;
   setDeviceMode: (mode: DeviceMode) => void;
   toggleSidebar: () => void;
   setCheckoutOpen: (open: boolean) => void;
   setMobilePanelOpen: (open: boolean) => void;
+  setMobilePanelSize: (size: MobilePanelSize) => void;
 }
 
 /** El script de index.html fija data-theme antes del primer pintado. */
@@ -34,12 +39,15 @@ export const useUiStore = create<UiStore>()(
       sidebarCollapsed: false,
       checkoutOpen: false,
       mobilePanelOpen: false,
+      mobilePanelSize: 'compact',
       setTheme: (theme) => set({ theme }),
       setOnboarded: (onboarded) => set((s) => ({ onboarded, hasStarted: s.hasStarted || onboarded })),
       setDeviceMode: (deviceMode) => set({ deviceMode }),
       toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
       setCheckoutOpen: (checkoutOpen) => set({ checkoutOpen }),
-      setMobilePanelOpen: (mobilePanelOpen) => set({ mobilePanelOpen }),
+      // Al abrir, siempre en modo compacto: primero se ve el cambio, después el detalle.
+      setMobilePanelOpen: (mobilePanelOpen) => set(mobilePanelOpen ? { mobilePanelOpen, mobilePanelSize: 'compact' } : { mobilePanelOpen }),
+      setMobilePanelSize: (mobilePanelSize) => set({ mobilePanelSize }),
     }),
     {
       name: 'vitrina-ui',

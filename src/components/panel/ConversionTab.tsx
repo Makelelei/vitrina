@@ -6,6 +6,7 @@ import { formatPrice } from '@/lib/format';
 import type { CheckoutMode, PaymentProvider } from '@/types';
 import { Switch } from '@/components/ui/Switch';
 import { PanelGroup } from './PanelGroup';
+import { SPOT } from '@/lib/spotlight';
 import { RadioCardGroup } from './RadioCardGroup';
 import { QrCard } from './QrCard';
 
@@ -35,7 +36,7 @@ export function ConversionTab() {
 
   return (
     <>
-      <PanelGroup title="Cómo cobrás" description={inquiryOnly ? 'Este rubro trabaja con consultas por WhatsApp.' : undefined}>
+      <PanelGroup focus={SPOT.catalog} title="Cómo cobrás" description={inquiryOnly ? 'Este rubro trabaja con consultas por WhatsApp.' : undefined}>
         <RadioCardGroup
           legend="Modo de checkout"
           hideLegend
@@ -58,7 +59,7 @@ export function ConversionTab() {
       </PanelGroup>
 
       {!inquiryOnly && s.checkoutMode !== 'whatsapp_only' && (
-        <PanelGroup title="Procesador de pagos" description="Simulado en esta demo: no se cobra nada.">
+        <PanelGroup focus={SPOT.catalog} title="Procesador de pagos" description="Simulado en esta demo: no se cobra nada.">
           <RadioCardGroup
             legend="Procesador"
             hideLegend
@@ -99,7 +100,7 @@ export function ConversionTab() {
         </PanelGroup>
       )}
 
-      <PanelGroup title="Operación">
+      <PanelGroup focus={SPOT.catalog} title="Operación">
         <div className="-my-1 divide-y divide-ui-border">
           {demo.mode === 'booking' && (
             <Switch

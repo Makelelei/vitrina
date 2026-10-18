@@ -37,7 +37,7 @@ export function AnnouncementBar() {
 
   if (!enabled || dismissed || !text.trim()) return null;
   return (
-    <aside aria-label="Anuncio" className="relative bg-site-primary px-10 py-2 text-center text-xs font-medium tracking-wide text-site-on-primary">
+    <aside aria-label="Anuncio" data-spotlight="announcement" className="relative bg-site-primary px-10 py-2 text-center text-xs font-medium tracking-wide text-site-on-primary">
       {text}
       <button type="button" onClick={() => setDismissed(true)} aria-label="Cerrar anuncio" className="absolute right-2 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-full hover:bg-black/15">
         <X className="size-3.5" aria-hidden="true" />
@@ -74,7 +74,7 @@ export function SiteNav({ centered = false }: { centered?: boolean }) {
     <header className="sticky top-0 z-20 border-b border-site-border bg-site-bg/90 backdrop-blur">
       <nav aria-label="Principal" className={`mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-5 @3xl:px-10 ${centered ? '@3xl:grid @3xl:grid-cols-[1fr_auto_1fr]' : ''}`}>
         {centered && <NavLinks links={links} />}
-        <BrandMark />
+        <span data-spotlight="brand" className="min-w-0 rounded-lg"><BrandMark /></span>
         <div className="flex items-center justify-end gap-4">
           {!centered && <NavLinks links={links} />}
           {demo.mode === 'order' ? (
@@ -147,7 +147,7 @@ export function Highlights() {
   const demo = useDemo();
   if (!on) return null;
   return (
-    <section aria-label="Por qué elegirnos" className="px-5 @3xl:px-10">
+    <section aria-label="Por qué elegirnos" data-spotlight="highlights" className="px-5 @3xl:px-10">
       <ul className="mx-auto grid max-w-6xl divide-y divide-site-border border-y border-site-border @3xl:grid-cols-3 @3xl:divide-x @3xl:divide-y-0">
         {demo.highlights.map(({ icon: Icon, title, text }) => (
           <li key={title} className="flex gap-4 py-6 @3xl:px-8 @3xl:first:pl-0">
@@ -175,7 +175,7 @@ export function FeaturedItems({ layout = 'row' }: { layout?: 'row' | 'promo' }) 
   if (!on || featured.length === 0) return null;
 
   return (
-    <SiteSection labelledBy={titleId}>
+    <SiteSection labelledBy={titleId} spot="featured">
       <SectionHeading id={titleId} title={demo.copy.featuredTitle}>
         <button type="button" onClick={() => scrollToSection('site-catalog')} className="inline-flex items-center gap-1.5 text-sm font-medium underline-offset-4 hover:underline">
           Ver todo <ArrowRight className="size-4" aria-hidden="true" />
@@ -234,7 +234,7 @@ export function Cravings() {
   if (!on || !demo.cravings?.length) return null;
 
   return (
-    <section aria-labelledby={titleId} className="px-5 pb-4 pt-12 @3xl:px-10">
+    <section aria-labelledby={titleId} data-spotlight="cravings" className="px-5 pb-4 pt-12 @3xl:px-10">
       <div className="mx-auto max-w-6xl">
         <h2 id={titleId} className="mb-4 text-xl">¿Qué se te antoja?</h2>
         <Carousel as="div" role="group" label="Filtrar por antojo" className="-mx-5 scroll-px-5 gap-3 px-5 pb-1">
@@ -273,7 +273,7 @@ export function CategoryTiles() {
   if (!on) return null;
 
   return (
-    <SiteSection labelledBy={titleId} className="pb-0!">
+    <SiteSection labelledBy={titleId} spot="categoryTiles" className="pb-0!">
       <h2 id={titleId} className="sr-only">Categorías</h2>
       <ul className="grid grid-cols-2 gap-3 @3xl:grid-cols-4">
         {categories.map((c) => {
@@ -312,7 +312,7 @@ export function Lookbook() {
   if (!on || looks.length < 2) return null;
 
   return (
-    <SiteSection labelledBy={titleId}>
+    <SiteSection labelledBy={titleId} spot="lookbook">
       <SectionHeading id={titleId} kicker="Lookbook" title="Cómo lo usamos" />
       <ul className="grid gap-3 @3xl:grid-cols-[1.4fr_1fr] @3xl:grid-rows-2">
         {looks.map((item, i) => (
@@ -372,7 +372,7 @@ export function Testimonials() {
   const titleId = useId();
   if (!on) return null;
   return (
-    <SiteSection labelledBy={titleId}>
+    <SiteSection labelledBy={titleId} spot="testimonials">
       <SectionHeading id={titleId} title={demo.copy.testimonialsTitle} />
       <ul className="grid gap-px overflow-hidden rounded-xl border border-site-border bg-site-border @3xl:grid-cols-3">
         {demo.testimonials.map((t) => (

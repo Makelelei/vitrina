@@ -179,7 +179,7 @@ function Collection({ variant, items, wide }: { variant: CatalogVariant; items: 
     <ul className={layout}>
       <AnimatePresence initial={false}>
         {items.map((item) => (
-          <motion.li key={item.id} layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+          <motion.li key={item.id} data-item-id={item.id} layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
             <Item item={item} wide={wide} />
           </motion.li>
         ))}

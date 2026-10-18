@@ -3,16 +3,18 @@ import { AnimatePresence, motion } from 'motion/react';
 import { LayoutTemplate, Package, Palette, RotateCcw, Zap } from 'lucide-react';
 import { useSiteBuilderStore } from '@/store/useSiteBuilderStore';
 import { useSwipe } from '@/hooks/useSwipe';
+import { useSiteUiStore } from '@/store/useSiteUiStore';
+import { SPOT } from '@/lib/spotlight';
 import { CategoryTab } from './CategoryTab';
 import { IdentityTab } from './IdentityTab';
 import { ContentTab } from './ContentTab';
 import { ConversionTab } from './ConversionTab';
 
 const TABS = [
-  { id: 'category', label: 'Rubro', full: 'Rubro y plantilla', Icon: LayoutTemplate, Panel: CategoryTab },
-  { id: 'identity', label: 'Identidad', full: 'Identidad y colores', Icon: Palette, Panel: IdentityTab },
-  { id: 'content', label: 'Contenido', full: 'Contenido y productos', Icon: Package, Panel: ContentTab },
-  { id: 'conversion', label: 'Conversión', full: 'Ajustes de conversión', Icon: Zap, Panel: ConversionTab },
+  { id: 'category', label: 'Rubro', full: 'Rubro y plantilla', Icon: LayoutTemplate, Panel: CategoryTab, spot: SPOT.top },
+  { id: 'identity', label: 'Identidad', full: 'Identidad y colores', Icon: Palette, Panel: IdentityTab, spot: SPOT.top },
+  { id: 'content', label: 'Contenido', full: 'Contenido y productos', Icon: Package, Panel: ContentTab, spot: SPOT.catalog },
+  { id: 'conversion', label: 'Conversión', full: 'Ajustes de conversión', Icon: Zap, Panel: ConversionTab, spot: SPOT.catalog },
 ] as const;
 
 export function ControlPanel() {
@@ -28,6 +30,7 @@ export function ControlPanel() {
     setDirection(next > index ? 1 : -1);
     setIndex(next);
     scrollRef.current?.scrollTo({ top: 0 });
+    useSiteUiStore.getState().focusPreview(TABS[next].spot, false);
     if (focus) tabRefs.current[next]?.focus();
   };
 
@@ -124,20 +127,20 @@ export function ControlPanel() {
                 </span>
               </div>
               <current.Panel />
+              {/* Al final del contenido (no fijo) para dejarle más alto a la edición en móvil. */}
+              <div className="border-t border-ui-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                <button
+                  type="button"
+                  onClick={() => window.confirm('¿Volver al ejemplo original de este rubro? Se pierden tus cambios.') && resetDemo()}
+                  className="ui-btn w-full text-xs text-ui-muted hover:bg-ui-hover hover:text-ui-fg"
+                >
+                  <RotateCcw className="size-3.5" aria-hidden="true" />
+                  Restablecer ejemplo
+                </button>
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>
-      </div>
-
-      <div className="shrink-0 border-t border-ui-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <button
-          type="button"
-          onClick={() => window.confirm('¿Volver al ejemplo original de este rubro? Se pierden tus cambios.') && resetDemo()}
-          className="ui-btn w-full text-xs text-ui-muted hover:bg-ui-hover hover:text-ui-fg"
-        >
-          <RotateCcw className="size-3.5" aria-hidden="true" />
-          Restablecer ejemplo
-        </button>
       </div>
     </div>
   );

@@ -26,9 +26,9 @@ export function SectionHeading({ id, title, kicker, subtitle, align = 'left', ch
 }
 
 /** Contenedor estándar de sección del sitio. */
-export function SiteSection({ id, labelledBy, label, className = '', children }: { id?: string; labelledBy?: string; label?: string; className?: string; children: ReactNode }) {
+export function SiteSection({ id, labelledBy, label, spot, className = '', children }: { id?: string; labelledBy?: string; label?: string; /** Nombre para el foco en vivo del editor. */ spot?: string; className?: string; children: ReactNode }) {
   return (
-    <section id={id} aria-labelledby={labelledBy} aria-label={label} className={`scroll-mt-14 px-5 py-14 @3xl:px-10 @3xl:py-20 ${className}`}>
+    <section id={id} data-spotlight={spot} aria-labelledby={labelledBy} aria-label={label} className={`scroll-mt-14 px-5 py-14 @3xl:px-10 @3xl:py-20 ${className}`}>
       <div className="mx-auto max-w-6xl">{children}</div>
     </section>
   );

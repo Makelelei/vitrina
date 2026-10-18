@@ -5,7 +5,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { AppHeader, SIDEBAR_ID } from '@/components/studio/AppHeader';
 import { StorageWarning } from '@/components/studio/StorageWarning';
 import { ControlPanel } from '@/components/panel/ControlPanel';
-import { MobilePanelSheet } from '@/components/panel/MobilePanelSheet';
+import { MobileEditorDock } from '@/components/panel/MobileEditorDock';
 import { PreviewCanvas } from '@/components/preview/PreviewCanvas';
 import { CheckoutModal } from '@/components/checkout/CheckoutModal';
 import { Welcome } from '@/components/onboarding/Welcome';
@@ -14,6 +14,7 @@ export default function App() {
   const theme = useUiStore((s) => s.theme);
   const onboarded = useUiStore((s) => s.onboarded);
   const collapsed = useUiStore((s) => s.sidebarCollapsed);
+  const editorOpen = useUiStore((s) => s.mobilePanelOpen);
   // En pantallas chicas el panel vive en la hoja inferior; no se monta dos veces.
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
@@ -57,11 +58,12 @@ export default function App() {
                   </div>
                 </motion.aside>
               )}
-              <main id="preview" tabIndex={-1} className="min-w-0 flex-1 pb-[calc(4.5rem+env(safe-area-inset-bottom))] focus:outline-none lg:pb-0">
+              <main id="preview" tabIndex={-1} className={`min-w-0 flex-1 focus:outline-none lg:pb-0 ${editorOpen && !isDesktop ? 'pb-0' : 'pb-[calc(4.5rem+env(safe-area-inset-bottom))]'}`}>
                 <PreviewCanvas />
               </main>
             </div>
-            {!isDesktop && <MobilePanelSheet />}
+            {/* Móvil: editor acoplado debajo de la vista previa (pantalla dividida). */}
+            {!isDesktop && <MobileEditorDock />}
             <CheckoutModal />
             <StorageWarning />
           </motion.div>
